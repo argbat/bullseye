@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 
-class BottomBar extends StatefulWidget {
+class BottomBar extends StatelessWidget {
   final int totalScore;
   final int round;
+  final VoidCallback onStartOver;
 
   const BottomBar({
     Key? key,
     required this.totalScore,
     required this.round,
+    required this.onStartOver,
   }) : super(key: key);
 
-  @override
-  State<BottomBar> createState() => _BottomBarState();
-}
-
-class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -24,24 +21,26 @@ class _BottomBarState extends State<BottomBar> {
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
             child: const Text('Start Over'),
-            onPressed: () {},
+            onPressed: () {
+              onStartOver();
+            },
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            children: const <Widget>[
-              Text('Score:'),
-              Text('9999'),
+            children: <Widget>[
+              const Text('Score:'),
+              Text('$totalScore'),
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            children: const <Widget>[
-              Text('Round:'),
-              Text('999'),
+            children: <Widget>[
+              const Text('Round:'),
+              Text('$round'),
             ],
           ),
         ),

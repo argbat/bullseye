@@ -1,7 +1,6 @@
 import 'package:bullseye/prompt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math';
 import 'bottom_bar.dart';
 import 'control.dart';
 import 'game_model.dart';
@@ -42,7 +41,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    _model = GameModel(Random().nextInt(100) + 1);
+    _model = GameModel(GameModel.nextTargetValue());
   }
 
   @override
@@ -57,17 +56,18 @@ class _GamePageState extends State<GamePage> {
               model: _model,
             ),
             TextButton(
-              onPressed: () {
-                _showAlert(context);
-              },
               child: const Text(
                 'Hit Me!',
                 style: TextStyle(color: Colors.blue),
               ),
+              onPressed: () => _showAlert(context),
             ),
             BottomBar(
               totalScore: _model.totalScore,
               round: _model.round,
+              onStartOver: () {
+                _startNewGame();
+              },
             ),
           ],
         ),
@@ -75,22 +75,39 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  void _startNewGame() {
+    setState(() {
+      _model = GameModel(GameModel.nextTargetValue());
+    });
+  }
+
   void _showAlert(BuildContext context) {
     var okButton = TextButton(
       child: const Text('Awesome'),
       onPressed: () {
         Navigator.of(context).pop();
+        _startNextRound();
       },
     );
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Title'),
-            content: Text('Current round score ${_model.roundScore()}'),
-            actions: [okButton],
-            elevation: 5,
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(_model.summaryTitle()),
+          content: Text('Current round score ${_model.roundScore()}'),
+          actions: [okButton],
+          elevation: 5,
+        );
+      },
+    );
+  }
+
+  void _startNextRound() {
+    setState(
+      () {
+        _model.updateTotalScore();
+        _model.nextRound(target: GameModel.nextTargetValue());
+      },
+    );
   }
 }
