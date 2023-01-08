@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:bullseye/text_styles.dart';
+import 'style_button.dart';
 
 class BottomBar extends StatelessWidget {
   final int totalScore;
@@ -17,39 +19,49 @@ class BottomBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            child: const Text('Start Over'),
-            onPressed: () {
-              onStartOver();
-            },
+        StyleButton(
+          icon: Icons.refresh,
+          onPressed: () {
+            onStartOver();
+          },
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Score',
+                  style: LabelTextStyle.bodyText1(context),
+                ),
+                Text(
+                  '$totalScore',
+                  style: ScoreNumberTextStyle.headline4(context),
+                ),
+              ],
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: <Widget>[
-              const Text('Score:'),
-              Text('$totalScore'),
-            ],
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Round',
+                  style: LabelTextStyle.bodyText1(context),
+                ),
+                Text(
+                  '$round',
+                  style: ScoreNumberTextStyle.headline4(context),
+                ),
+              ],
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: <Widget>[
-              const Text('Round:'),
-              Text('$round'),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            child: const Text('info'),
-            onPressed: () {},
-          ),
+        StyleButton(
+          icon: Icons.info,
+          onPressed: () {},
         ),
       ],
     );

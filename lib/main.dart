@@ -1,4 +1,6 @@
+import 'package:bullseye/hitme_button.dart';
 import 'package:bullseye/prompt.dart';
+import 'package:bullseye/style_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'bottom_bar.dart';
@@ -21,6 +23,8 @@ class BullsEyeApp extends StatelessWidget {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+    // Hide status bar if any.
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     return const MaterialApp(
       title: 'Bullete',
       home: GamePage(),
@@ -46,30 +50,56 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Prompt(targetValue: _model.target),
-            Control(
-              model: _model,
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+      ),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    image: DecorationImage(
+                      image: AssetImage('images/background.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 26),
+                        child: Prompt(targetValue: _model.target),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Control(
+                          model: _model,
+                        ),
+                      ),
+                      HitmeButton(
+                        text: 'Hit Me!',
+                        onPressed: () => _showAlert(context),
+                      ),
+                      BottomBar(
+                        totalScore: _model.totalScore,
+                        round: _model.round,
+                        onStartOver: () {
+                          _startNewGame();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            TextButton(
-              child: const Text(
-                'Hit Me!',
-                style: TextStyle(color: Colors.blue),
-              ),
-              onPressed: () => _showAlert(context),
-            ),
-            BottomBar(
-              totalScore: _model.totalScore,
-              round: _model.round,
-              onStartOver: () {
-                _startNewGame();
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -82,8 +112,8 @@ class _GamePageState extends State<GamePage> {
   }
 
   void _showAlert(BuildContext context) {
-    var okButton = TextButton(
-      child: const Text('Awesome'),
+    var okButton = StyleButton(
+      icon: Icons.close,
       onPressed: () {
         Navigator.of(context).pop();
         _startNextRound();
