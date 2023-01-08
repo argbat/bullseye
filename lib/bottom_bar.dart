@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bullseye/text_styles.dart';
 import 'style_button.dart';
+import 'about.dart';
 
 class BottomBar extends StatelessWidget {
   final int totalScore;
@@ -61,7 +62,14 @@ class BottomBar extends StatelessWidget {
         ),
         StyleButton(
           icon: Icons.info,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AboutPage(),
+              ),
+            );
+          },
         ),
       ],
     );
