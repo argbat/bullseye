@@ -27,9 +27,7 @@ class GameModel {
       bonus = 50;
     } // else no bonus to add.
 
-    var newScore = maxScore - diff;
-
-    return newScore + bonus;
+    return (maxScore - diff) + bonus;
   }
 
   int _diff() => (current - target).abs();

@@ -60,46 +60,54 @@ class _GamePageState extends State<GamePage> {
           body: Center(
             child: Stack(
               children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage('images/background.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                _backgorund(),
                 SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 26),
-                        child: Prompt(targetValue: _model.target),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Control(
-                          model: _model,
-                        ),
-                      ),
-                      HitmeButton(
-                        text: 'Hit Me!',
-                        onPressed: () => _showAlert(context),
-                      ),
-                      BottomBar(
-                        totalScore: _model.totalScore,
-                        round: _model.round,
-                        onStartOver: () {
-                          _startNewGame();
-                        },
-                      ),
-                    ],
-                  ),
+                  child: _gameUi(context),
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Column _gameUi(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 26),
+          child: Prompt(targetValue: _model.target),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Control(
+            model: _model,
+          ),
+        ),
+        HitmeButton(
+          text: 'Hit Me!',
+          onPressed: () => _showAlert(context),
+        ),
+        BottomBar(
+          totalScore: _model.totalScore,
+          round: _model.round,
+          onStartOver: () {
+            _startNewGame();
+          },
+        ),
+      ],
+    );
+  }
+
+  Container _backgorund() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        image: DecorationImage(
+          image: AssetImage('images/background.png'),
+          fit: BoxFit.cover,
         ),
       ),
     );
